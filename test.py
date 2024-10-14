@@ -47,33 +47,31 @@ class Book:
 
 
 class Contract:
-    all = []  # Track all contracts using 'all' instead of 'all_contracts'
+    all_contracts = []
 
     def __init__(self, author, book, date="", royalties=0):
-        
         if not isinstance(author, Author):
-            raise Exception ("Invalid author.")
+            raise Exception("Invalid author.")
         if not isinstance(book, Book):
-            raise Exception ("Invalid book.")
+            raise Exception("Invalid book.")
         if not isinstance(date, str):
-            raise Exception ("Invalid date.")
+            raise Exception("Invalid date.")
         if not isinstance(royalties, int) or royalties < 0:
-            raise Exception ("Invalid royalties value.")
+            raise Exception("Invalid royalties value.")
 
         self.author = author
         self.book = book
         self.date = date
         self.royalties = royalties
 
-        # Add contract to author, book, and all contracts
+        # Add contract to related author and book
         self.author._contracts.append(self)
         self.book._contracts.append(self)
-        Contract.all.append(self)  # Use 'all' instead of 'all_contracts'
+        Contract.all_contracts.append(self)
 
     @classmethod
     def contracts_by_date(cls, date):
-        # Filter contracts by the given date and return sorted results
-        return sorted(
-            [contract for contract in cls.all if contract.date == date],
-            key=lambda contract: contract.date
-        )
+        # Filter contracts by the given date
+        filtered_contracts = [contract for contract in cls.all_contracts if contract.date == date]
+        # Sort contracts by date
+        return sorted(filtered_contracts, key=lambda contract: contract.date)
